@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# Distribution folder
+dist/*
+
+# Logs files
+*.log
+resources/.DS_Store
+.DS_Store
+log.txt
