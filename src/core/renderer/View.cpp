@@ -20,25 +20,12 @@
 
 #include "math/Vector3d.h"
 
-/*
-#define	DEBUG
-*/
-#ifdef DEBUG
-FILE *fDebug;
-#endif
-
-// extern Vector3d ORIGIN;
-// extern Vector3d BACKGROUND;
 long NUMBER_OF_LIGHTS;
 
 Vector3d TColor;
 
 Vector3d AMBIENT_INTENSITY(0.3, 0.3, 0.3);
 Vector3d BACKGROUND_COLOR(0.65, 0.65, 0.65);
-
-char *screen;
-
-// extern Frame frame;
 
 #ifndef M_PI_360
 #define M_PI_360 0.00872664625997164788
@@ -53,8 +40,6 @@ View::View(void)
 
 long View::Init(void)
 {
-	//	Buffer
-	//	BITMAP bm;
 
 	//	Objects
 	Vector3d scale;
@@ -200,12 +185,9 @@ long View::Init(void)
 	material_floor->bump_type = NO_BUMP;
 	material_floor->bump_data = NULL;
 
-	// setV ( &scale, 700.0, 700.0, 700.0 ) ;
 	scale.Set(100.0, 100.0, 100.0);
 	material_floor->SetScale(scale);
-	// setV ( &color1, 1.0, 1.0, 1.0 ) ;
 	color1.Set(1.0, 1.0, 1.0);
-	// setV ( &color2, 0.2, 0.2, 0.6 ) ;
 	color2.Set(0.2, 0.2, 0.6);
 	material_floor->SetColor(color1, color2);
 
@@ -300,57 +282,24 @@ long View::Init(void)
 
 	///////////////////////////////////////////
 
-	//	Definicion de objetos
-	/*
-	//	tobject						= ( object_type *)malloc ( sizeof ( object_type ) ) ;
-		tobject						= new ( Object ) ;
-
-		tobject->type_of_object		= SPHERE ;
-		tobject->obj.sphere			= (TSPHERE*)&sphere ;
-		tobject->material			= &material_pintas ;
-		tobject->next				= NULL ;
-
-		Add ( &frame.objects, tobject ) ;
-	*/
-
 	new_sphere = new (Sphere);
 	new_sphere->Init(Vector3d(200.0, 200.0, 500.0), // Coordinates of center
 					 150.0);						// Radius
 													//	new_sphere->SetMaterial ( material_pintas ) ;
 	new_sphere->SetMaterial(material_wood);
 	GeometryManager::GetInstance()->Add(new_sphere);
-	//	GeometryManager::GetInstance()->objects.push_back ( new_sphere ) ;
 
 	new_sphere = new (Sphere);
 	new_sphere->Init(Vector3d(-300.0, 150.0, 800.0), // Coordinates of center
 					 170.0);						 // Radius
 	new_sphere->SetMaterial(material_stripes);
 	GeometryManager::GetInstance()->Add(new_sphere);
-	//	GeometryManager::GetInstance()->objects.push_back ( new_sphere ) ;
 
 	new_sphere = new (Sphere);
 	new_sphere->Init(Vector3d(0.0, 400.0, 900.0), // Coordinates of center
 					 200.0);					  // Radius
 	new_sphere->SetMaterial(material_flat_mirror);
 	GeometryManager::GetInstance()->Add(new_sphere);
-	//	GeometryManager::GetInstance()->objects.push_back ( new_sphere ) ;
-
-	/*
-		tobject->type_of_object		= SPHERE ;
-		tobject->obj.sphere			= (TSPHERE*)&sphere4 ;
-		tobject->material_type			= &material_wall ;
-		tobject->next				= NULL ;
-
-		Add ( &ListaObjetos, tobject ) ;
-	*/
-	/*
-	  tobject->type_of_object		= INFINITE_PLANE ;
-		tobject->obj.plane			= (TPLANE*)&plane ;
-		tobject->material			= &material_floor ;
-		tobject->next				= NULL ;
-
-		Add ( &frame.objects, tobject ) ;
-	*/
 
 	new_plane = new (InfinitePlane);
 	new_plane->Init(Vector3d(0.0, 1.0, 0.0), // Surface normal
@@ -358,7 +307,6 @@ long View::Init(void)
 	);
 	new_plane->SetMaterial(material_floor);
 	GeometryManager::GetInstance()->Add(new_plane);
-	//	GeometryManager::GetInstance()->objects.push_back ( new_plane ) ;
 
 	/*
 	 */
@@ -440,32 +388,20 @@ long View::Init(void)
 	LightManager::GetInstance()->Add(light);
 
 	sprintf(light.name, "LIGHT02");
-	//	setV ( &light.position, -500.0,2000.0,-500.0 ) ;
 	light.position.Set(-700.0, 2000.0, -500.0);
-	//	setV ( &light.color, 0.50,0.50,0.50 ) ;
 	light.color.Set(0.60, 0.60, 0.60);
 
 	LightManager::GetInstance()->Add(light);
 
 	sprintf(light.name, "LIGHT03");
-	//	setV ( &light.position, -500.0,2000.0,-500.0 ) ;
 	light.position.Set(700.0, 2000.0, -500.0);
-	//	setV ( &light.color, 0.50,0.50,0.50 ) ;
 	light.color.Set(0.30, 0.30, 0.30);
 
-	//	LightManager::GetInstance()->AddLightToList ( light ) ;
-
-	//	setV ( &camera.location,  0.0, 100.0, -200.0 ) ;
 	camera.location.Set(0.0, 100.0, -200.0);
-	//	setV ( &camera.direction, 0.0,  0.0, 1.0 ) ;
 	camera.direction.Set(0.0, 0.0, 1.0);
-	//	setV ( &camera.up,        0.0,  1.0, 0.0 ) ;
 	camera.up.Set(0.0, 1.0, 0.0);
-	//	setV ( &camera.right,     1.33, 0.0, 0.0 ) ;
 	camera.right.Set(1.33, 0.0, 0.0);
 	camera.angle = 70;
-
-	//	AddFrameToList ( &frames, &frame ) ;
 
 	{
 
@@ -501,8 +437,6 @@ void View::RenderScene(float fAngle,
 
 	Vector3d color;
 
-	//	cls ( screen ) ;
-
 	for (yscreen = -1; yscreen <= height; yscreen += 1)
 	{
 		for (xscreen = -1; xscreen <= width; xscreen += 1)
@@ -515,9 +449,16 @@ void View::RenderScene(float fAngle,
 
 			float fragmentx = xscreen;
 			float fragmenty = yscreen;
+
+			// for (int n = 0; n < 4; n++)
+
 			// for (float fragmentx = xscreen; fragmentx < xscreen + 1.0f; fragmentx += 0.5f)
 			//	for (float fragmenty = yscreen; fragmenty < yscreen + 1.0f; fragmenty += 0.5f)
 			{
+
+				// fragmentx = xscreen + ((rand() % 200) - 100) / 100000.0f;
+				// fragmenty = yscreen + ((rand() % 200) - 100) / 100000.0f;
+
 				//	Convert the x coordinate to be a DBL from -0.5 to 0.5.
 				x0 = (double)fragmentx / (double)width - 0.5;
 				//	Convert the y coordinate to be a DBL from -0.5 to 0.5.
@@ -542,7 +483,7 @@ void View::RenderScene(float fAngle,
 				else
 					TColor = check.color;
 
-				//			color	= color + (TColor * 0.25f) ;
+				// color = color + (TColor * 0.25f);
 				color = TColor;
 			}
 
