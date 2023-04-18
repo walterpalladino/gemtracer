@@ -1,0 +1,311 @@
+screen.width 1920
+screen.height 1080
+
+Bump.Wave.new onda01
+
+onda01.center 500.0 0.0 2000.0
+onda01.wavelength 500 
+onda01.phase 0
+onda01.attenuation 0.10
+onda01.amplitude 10.0
+
+
+new material_pintas
+Material.Brick.new material_wall
+Material.Spheric.new material_stripes
+Material.Checker.new material_floor
+Material.Flat.new material_flat_mirror
+Material.Flat.new material06
+
+
+material_pintas.difusse		0.5 0.5 0.5
+material_pintas.specular	0.5 0.5 0.5
+material_pintas.ES		100.0
+material_pintas.kl		0.0
+material_pintas.ir		0.10
+material_pintas.METAL		0
+material_pintas.color		0.80 0.80 0.80
+material_pintas.reflected	0.1 0.1 0.1
+material_pintas.refracted	0.40 0.40 0.50
+material_pintas.bump_type	NO_BUMP
+material_pintas.bump_data	NULL
+
+material_pintas.blend		1.0
+material_pintas.center		100.0 -150.0 600.0
+material_pintas.color1		0.5 0.5 1.0
+material_pintas.color2		1.0 1.0 1.0
+material_pintas.scale		10.0 10.0 10.0
+
+
+
+material_wall.difusse		1.0 1.0 1.0
+material_wall.specular		0.0 0.0 0.0
+material_wall.ES		0.0
+material_wall.kl		0.0
+material_wall.ir		0.0
+material_wall.METAL		0
+material_wall.color		0.60 0.80 0.80
+material_wall.reflected		0.0  0.0  0.0
+material_wall.refracted		0.0  0.0  0.0
+material_wall.bump_type		NO_BUMP
+material_wall.bump_data		NULL
+
+
+material_stripes.difusse	0.8, 0.8, 0.8) ;
+material_stripes.specular	0.4, 0.4, 0.4) ;
+material_stripes.ES		= 100.0 ; 				    //  Specular Strenght
+material_stripes.kl		= 0.0 ; 				    //  Coef. Luminosity
+material_stripes.ir		= 0.0 ; 				    //  Index of Refraction
+material_stripes.METAL		= 0 ;					//  PHONG / METAL Flag
+material_stripes.color		= Vector3d ( 0.60, 0.40, 0.40 ) ;		// color
+material_stripes.reflected	= Vector3d ( 0.0, 0.0, 0.0 ) ;		// reflected
+material_stripes.refracted	= Vector3d ( 0.0, 0.0, 0.0 ) ;		// refracted
+material_stripes.bump_type	= NO_BUMP ;
+material_stripes.bump_data	= NULL ;
+
+color1.Set ( 1.0, 1.0, 1.0 ) ;
+color2.Set ( 1.0, 0.0, 0.0 ) ;
+material_stripes.SetColor ( color1, color2 ) ;
+material_stripes.SetRadius ( 10.0, 40.0 ) ;
+material_stripes.SetBlend ( 0.3 ) ;
+center.Set ( 0, 0, 0 ) ;
+material_stripes.SetCenter ( center ) ;
+scale.Set ( 1.0, 0.0, 0.0 ) ;
+material_stripes.SetScale ( scale ) ;
+
+
+material_floor	= new ( Checker ) ;
+
+material_floor.Init () ;
+
+material_floor.difusse	= Vector3d ( 0.8, 0.8, 0.8) ;
+material_floor.specular	= Vector3d ( 0.6, 0.6, 0.6) ;
+material_floor.ES	= 50.0 ; 				    //  Specular Strenght
+material_floor.kl	= 0.0 ; 				    //  Coef. Luminosity
+material_floor.ir	= 0.0 ; 				    //  Index of Refraction
+material_floor.METAL	= 0 ;					//  PHONG / METAL Flag
+material_floor.color		= Vector3d ( 0.30, 0.30, 0.30 ) ;		// color
+material_floor.reflected	= Vector3d ( 0.0, 0.0, 0.0 ) ;		// reflected
+material_floor.refracted	= Vector3d ( 0.0, 0.0, 0.0 ) ;		// refracted
+//material_floor.bump_type	= WAVE ;
+//material_floor.bump_data	= onda01 ;
+material_floor.bump_type	= NO_BUMP ;
+material_floor.bump_data	= NULL ;
+
+
+//setV ( &scale, 700.0, 700.0, 700.0 ) ;
+scale.Set ( 700.0, 700.0, 700.0 ) ;
+material_floor.SetScale ( scale ) ;
+//setV ( &color1, 1.0, 1.0, 1.0 ) ;
+color1.Set ( 1.0, 1.0, 1.0 ) ;
+//setV ( &color2, 0.2, 0.2, 0.6 ) ;
+color2.Set ( 0.2, 0.2, 0.6 ) ;
+material_floor.SetColor ( color1, color2 ) ;
+
+
+
+
+material_flat_mirror	= new ( Flat ) ;
+
+material_flat_mirror.Init () ;
+
+material_flat_mirror.difusse	= Vector3d ( 0.60, 0.60, 0.60) ;
+material_flat_mirror.specular	= Vector3d ( 1.0, 1.0, 1.0) ;
+material_flat_mirror.ES	= 10.0 ; 				    //  Specular Strenght
+material_flat_mirror.kl	= 0.0 ; 				    //  Coef. Luminosity
+material_flat_mirror.ir	= 0.0 ; 				    //  Index of Refraction
+material_flat_mirror.METAL	= 1 ;					//  PHONG / METAL Flag
+material_flat_mirror.color		= Vector3d ( 0.40, 0.40, 0.40 ) ;		// color
+material_flat_mirror.reflected	= Vector3d ( 0.60, 0.60, 0.60 ) ;		// reflected
+material_flat_mirror.refracted	= Vector3d ( 0.0, 0.0, 0.0 ) ;		// refracted
+//material_flat_mirror.text_type	= FLAT ;					//	text_type
+//material_flat_mirror.text_data	= NULL ;					//	text_data
+material_flat_mirror.bump_type	= NO_BUMP ;
+material_flat_mirror.bump_data	= NULL ;
+
+
+material06	= new ( Flat ) ;
+
+//material06.kd	= 0.50 ;			     	//  Coef. Difusse
+material06.difusse	= Vector3d ( 0.5, 0.5, 0.5) ;
+//material06.ks	= 0.20 ;    				//  Coef. Specular
+material06.specular	= Vector3d ( 0.2, 0.2, 0.2) ;
+material06.ES	= 100.0 ; 				    //  Specular Strenght
+//material06.kt	= 0.5 ; 				    //  Coef. Transmitted
+material06.kl	= 0.0 ; 				    //  Coef. Luminosity
+material06.ir	= 1.5 ; 				    //  Index of Refraction
+material06.METAL	= 0 ;					//  PHONG / METAL Flag
+material06.color		= Vector3d ( 0.70, 0.70, 0.70 ) ;		// color
+material06.reflected	= Vector3d ( 0.10, 0.10, 0.10 ) ;		// reflected
+material06.refracted	= Vector3d ( 0.70, 0.70, 0.70 ) ;		// refracted
+//material06.text_type	= FLAT ;					//	text_type
+//material06.text_data	= NULL ;					//	text_data
+material06.bump_type	= NO_BUMP ;
+material06.bump_data	= NULL ;
+
+
+
+///////////////////////////////////////////
+
+
+	//	Definicion de objetos
+Sphere new_sphere
+new_sphere.center	200.0 200.0 500.0
+new_spehere.radius	150.0
+new_sphere.material	material_pintas
+new_sphere.addObject
+
+
+Spehere new_sphere2
+new_sphere2.center	-400.0 300.0 800.0
+new_sphere2.radius	200.0
+new_sphere2.material	material_stripes
+new_sphere2.addObject
+
+Spehere new_sphere3
+
+	new_sphere	= new ( Sphere ) ;
+	new_sphere.Init ( Vector3d ( 0.0, 400.0 ,900.0 ),   // Coordinates of center
+						200.0 ) ;       // Radius
+	new_sphere.SetMaterial ( material_flat_mirror ) ;
+	ObjectManager::GetInstance().AddObjectToList ( new_sphere ) ;
+//	ObjectManager::GetInstance().objects.push_back ( new_sphere ) ;
+
+
+
+/*
+	tobject.type_of_object		= SPHERE ;
+	tobject.obj.sphere			= (TSPHERE*)&sphere4 ;
+	tobject.material_type			= &material_wall ;
+	tobject.next				= NULL ;
+
+	AddObjectToList ( &ListaObjetos, tobject ) ;
+*/
+/*
+  tobject.type_of_object		= INFINITE_PLANE ;
+	tobject.obj.plane			= (TPLANE*)&plane ;
+	tobject.material			= &material_floor ;
+	tobject.next				= NULL ;
+
+	AddObjectToList ( &frame.objects, tobject ) ;
+*/
+
+	new_plane	= new ( InfinitePlane ) ;
+	new_plane.Init ( Vector3d (0.0, 1.0, 0.0), 	 // Surface normal
+					150			   // Distance from origin
+					) ;
+	new_plane.SetMaterial ( material_floor ) ;
+	ObjectManager::GetInstance().AddObjectToList ( new_plane ) ;
+//	ObjectManager::GetInstance().objects.push_back ( new_plane ) ;
+
+
+
+/*
+*/
+
+
+//new_patch	= (TPATCH*)malloc ( sizeof (TPATCH) ) ;
+new_patch	= new ( Patch ) ;
+new_patch.Init() ;
+
+/*
+setV( &vertex[0],  -60.0,    0.0, 475.0 );
+setV( &vertex[1],   60.0,    0.0, 475.0 );
+setV( &vertex[2],  -60.0,  120.0, 475.0 );
+patch.AddTriangle ( vertex[0], vertex[1], vertex[2] );
+
+setV( &vertex[0],   60.0,    0.0, 475.0 );
+setV( &vertex[1],   60.0,  120.0, 475.0 );
+setV( &vertex[2],  -60.0,  120.0, 475.0 );
+patch.AddTriangle ( vertex[0], vertex[1], vertex[2] );
+
+setV( &vertex[0],   60.0,  120.0, 475.0 );
+setV( &vertex[1],    0.0,  180.0, 475.0 );
+setV( &vertex[2],  -60.0,  120.0, 475.0 );
+patch.AddTriangle ( vertex[0], vertex[1], vertex[2] );
+*/
+
+
+//setV( &vertex[0],  -60.0,    0.0, 800.0 );
+vertex[0].Set ( -60.0,    0.0, 800.0 );
+//setV( &vertex[1],   60.0,    0.0, 800.0 );
+vertex[1].Set (  60.0,    0.0, 800.0 );
+//setV( &vertex[2],  -60.0,  120.0, 800.0 );
+vertex[2].Set ( -60.0,  120.0, 800.0 );
+new_patch.AddTriangle ( vertex[0], vertex[1], vertex[2] );
+
+//setV( &vertex[0],   60.0,    0.0, 800.0 );
+vertex[0].Set (   60.0,    0.0, 800.0 );
+//setV( &vertex[1],   60.0,  120.0, 800.0 );
+vertex[1].Set (   60.0,  120.0, 800.0 );
+//setV( &vertex[2],  -60.0,  120.0, 800.0 );
+vertex[2].Set (  -60.0,  120.0, 800.0 );
+new_patch.AddTriangle ( vertex[0], vertex[1], vertex[2] );
+
+//setV( &vertex[0],   60.0,  120.0, 800.0 );
+vertex[0].Set (   60.0,  120.0, 800.0 );
+//setV( &vertex[1],    0.0,  180.0, 800.0 );
+vertex[1].Set (    0.0,  180.0, 800.0 );
+//setV( &vertex[2],  -60.0,  120.0, 800.0 );
+vertex[2].Set (  -60.0,  120.0, 800.0 );
+new_patch.AddTriangle ( vertex[0], vertex[1], vertex[2] );
+
+new_patch.SetCenter ( Vector3d ( 100.0, 0.0, 0.0 ) ) ;
+
+	new_patch.material			= material_wall ;
+
+	ObjectManager::GetInstance().AddObjectToList ( new_patch ) ;
+
+
+
+
+
+
+	//	Definicion de Luces
+Light Light01
+Light01.position	500.0 1000.0 -500.0
+Light01.color		0.60  0.60 0.60
+Light01.addLight
+
+Light Light02
+Light02.position	-700.0 2000.0 -500.0
+Light02.color		0.30 0.30 0.30
+Light02.addLight
+
+Light Light03
+Light03.position	700.0 2000.0 -500.0
+Light03.color		0.30,0.30,0.30
+Light03.addLight
+
+
+
+//	setV ( &frame.camera.location,  0.0, 100.0, -200.0 ) ;
+	frame.camera.location.Set (  0.0, 100.0, -200.0 ) ;
+//	setV ( &frame.camera.direction, 0.0,  0.0, 1.0 ) ;
+	frame.camera.direction.Set ( 0.0,  0.0, 1.0 ) ;
+//	setV ( &frame.camera.up,        0.0,  1.0, 0.0 ) ;
+	frame.camera.up.Set (        0.0,  1.0, 0.0 ) ;
+//	setV ( &frame.camera.right,     1.33, 0.0, 0.0 ) ;
+	frame.camera.right.Set (     1.33, 0.0, 0.0 ) ;
+	frame.camera.angle	= 70 ;
+
+
+//	AddFrameToList ( &frames, &frame ) ;
+
+
+{
+
+
+double	Right_Length ,
+		Direction_Length ;
+
+//	normalize( frame.camera.direction, &frame.camera.direction ) ;
+	frame.camera.direction.Normalize () ;
+//	Right_Length	= lenV ( frame.camera.right, VZERO ) ;
+	Right_Length	= ( frame.camera.right - VZERO ).Magnitude () ;
+	Direction_Length	= Right_Length / tan ( frame.camera.angle * M_PI_360 ) / 2.0 ;
+//	mulS ( frame.camera.direction, Direction_Length, &frame.camera.direction ) ;
+	frame.camera.direction	= frame.camera.direction * Direction_Length ;
+}
+
+

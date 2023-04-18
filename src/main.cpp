@@ -1,6 +1,4 @@
 #include <iostream>
-// #include "App.h"
-// #include "lodepng.h"
 
 #include "core/renderer/View.h"
 
@@ -12,26 +10,19 @@ int main(int argc, char *argv[])
 {
     const char *filename = argc > 1 ? argv[1] : "test.png";
 
-    View::GetInstance()->Init();
+    //    View::GetInstance()->Init();
+    View::GetInstance()->Init(1280, 720);
 
-    float fAngle = 0;
-    float fXPos = 128 << 2;
-    float fYPos = 128 << 2;
-    float fZPos = 50;
-    float fStep = 32;
-    float fDelta = 15; // 3.14159 / 12.0 ;
+    View::GetInstance()->SetCamera(Vector3d(0.0, 100.0, -200.0),
+                                   Vector3d(0.0, 0.0, 1.0),
+                                   Vector3d(1280.0 / 720.0, 0.0, 0.0),
+                                   Vector3d(0.0, 1.0, 0.0),
+                                   90.0);
 
-    View::GetInstance()->RenderScene(
-        fAngle,
-        fZPos,
-        fXPos,
-        fYPos);
-    /*
-        encodeOneStep(filename,
-                      View::GetInstance()->GetImageBuffer().data,
-                      View::GetInstance()->GetImageBuffer().width,
-                      View::GetInstance()->GetImageBuffer().height);
-    */
+    //  Render the scene
+    View::GetInstance()->RenderScene(true);
+
+    //  Save image as PNG
     std::vector<unsigned char> image = View::GetInstance()->GetImageBuffer().data;
 
     unsigned error = lodepng::encode(filename,

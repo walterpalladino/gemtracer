@@ -38,6 +38,13 @@ View::View(void)
 	height = 1080;
 }
 
+long View::Init(int width, int height)
+{
+	this->width = width;
+	this->height = height;
+	Init();
+}
+
 long View::Init(void)
 {
 
@@ -54,27 +61,6 @@ long View::Init(void)
 
 	InfinitePlane *new_plane;
 	Sphere *new_sphere;
-
-	/*
-	Sphere	sphere ( Vector3d ( 500.0, 300.0, 1000.0 ),   // Coordinates of center
-						200.0
-					) ;       // Radius
-	Sphere	sphere2 ( Vector3d ( -400.0, 500.0, 800.0 ),   // Coordinates of center
-							170.0 ) ;       // Radius
-	Sphere	sphere3 ( Vector3d ( 0.0, 400.0 ,700.0 ),   // Coordinates of center
-							100.0 ) ;       // Radius
-	*/
-	/*
-	TSPHERE sphere4={-50,100,800,   // Coordinates of center
-							150};       // Radius
-	*/
-	Sphere sphere4(Vector3d(-50.0, -25.0, 1500.0), // Coordinates of center
-				   150.0);						   // Radius
-												   /*
-												   Plane	plane( Vector3d (0.0, 1.0, 0.0), 	 // Surface normal
-																	   300			   // Distance from origin
-																	   ) ;
-												   */
 
 	//	Video Buffer
 	imageBuffer.Create(width, height);
@@ -396,34 +382,58 @@ long View::Init(void)
 	sprintf(light.name, "LIGHT03");
 	light.position.Set(700.0, 2000.0, -500.0);
 	light.color.Set(0.30, 0.30, 0.30);
+	/*
+		camera.location.Set(0.0, 100.0, -200.0);
+		camera.direction.Set(0.0, 0.0, 1.0);
+		camera.up.Set(0.0, 1.0, 0.0);
+		camera.right.Set(1.33, 0.0, 0.0);
+		camera.angle = 70;
 
-	camera.location.Set(0.0, 100.0, -200.0);
-	camera.direction.Set(0.0, 0.0, 1.0);
-	camera.up.Set(0.0, 1.0, 0.0);
-	camera.right.Set(1.33, 0.0, 0.0);
-	camera.angle = 70;
+		{
 
-	{
+			double Right_Length,
+				Direction_Length;
 
-		double Right_Length,
-			Direction_Length;
-
-		//	normalize( camera.direction, &camera.direction ) ;
-		camera.direction.Normalize();
-		//	Right_Length	= lenV ( camera.right, VZERO ) ;
-		Right_Length = (camera.right - VZERO).Magnitude();
-		Direction_Length = Right_Length / tan(camera.angle * M_PI_360) / 2.0;
-		//	mulS ( camera.direction, Direction_Length, &camera.direction ) ;
-		camera.direction = camera.direction * Direction_Length;
-	}
-
+			//	normalize( camera.direction, &camera.direction ) ;
+			camera.direction.Normalize();
+			//	Right_Length	= lenV ( camera.right, VZERO ) ;
+			Right_Length = (camera.right - VZERO).Magnitude();
+			Direction_Length = Right_Length / tan(camera.angle * M_PI_360) / 2.0;
+			//	mulS ( camera.direction, Direction_Length, &camera.direction ) ;
+			camera.direction = camera.direction * Direction_Length;
+		}
+	*/
 	return (0);
 }
 
-void View::RenderScene(float fAngle,
-					   float fZPos,
-					   float fXPos,
-					   float fYPos)
+void View::SetCamera(Vector3d location,
+					 Vector3d direction,
+					 Vector3d right,
+					 Vector3d up,
+					 double angle)
+{
+
+	camera.location = location;
+	camera.direction = direction;
+	camera.up = up;
+	camera.right = right;
+	camera.angle = angle;
+
+	double Right_Length,
+		Direction_Length;
+
+	camera.direction.Normalize();
+
+	Right_Length = (camera.right - VZERO).Magnitude();
+	Direction_Length = Right_Length / tan(camera.angle * M_PI_360) / 2.0;
+	camera.direction = camera.direction * Direction_Length;
+}
+
+void View::LoadScene(char *sceneName)
+{
+}
+
+void View::RenderScene(bool useSSAA)
 {
 
 	Vector3d rayvec, raystart;
@@ -437,79 +447,131 @@ void View::RenderScene(float fAngle,
 
 	Vector3d color;
 
-	for (yscreen = -1; yscreen <= height; yscreen += 1)
+	float jitterMatrix[4 * 2] = {
+		-1.0 / 4.0,
+		3.0 / 4.0,
+		3.0 / 4.0,
+		1.0 / 3.0,
+		-3.0 / 4.0,
+		-1.0 / 4.0,
+		1.0 / 4.0,
+		-3.0 / 4.0,
+	};
+
+	for (yscreen = 0; yscreen < height; yscreen += 1)
 	{
-		for (xscreen = -1; xscreen <= width; xscreen += 1)
+		for (xscreen = 0; xscreen < width; xscreen += 1)
 		{
 			raystart.x = camera.location.x;
 			raystart.y = camera.location.y;
 			raystart.z = camera.location.z;
 
 			color.Set(0.0, 0.0, 0.0);
+			/*
+						float fragmentx = xscreen;
+						float fragmenty = yscreen;
 
-			float fragmentx = xscreen;
-			float fragmenty = yscreen;
+						// Accumulate light for N samples.
+						for (int sample = 0; sample < 4; ++sample)
+						{
 
-			// for (int n = 0; n < 4; n++)
+							fragmentx += jitterMatrix[2 * sample];
+							fragmenty += jitterMatrix[2 * sample + 1];
 
-			// for (float fragmentx = xscreen; fragmentx < xscreen + 1.0f; fragmentx += 0.5f)
-			//	for (float fragmenty = yscreen; fragmenty < yscreen + 1.0f; fragmenty += 0.5f)
+							//	Convert the x coordinate to be a DBL from -0.5 to 0.5.
+							x0 = (double)fragmentx / (double)width - 0.5;
+							//	Convert the y coordinate to be a DBL from -0.5 to 0.5.
+							y0 = ((double)(height - 1) - (double)fragmenty) / (double)height - 0.5;
+
+							rayvec.x = camera.direction.x +
+									   x0 * camera.right.x +
+									   y0 * camera.up.x;
+							rayvec.y = camera.direction.y +
+									   x0 * camera.right.y +
+									   y0 * camera.up.y;
+							rayvec.z = camera.direction.z +
+									   x0 * camera.right.z +
+									   y0 * camera.up.z;
+
+							rayvec.Normalize();
+
+							RayTracer::GetInstance()->TraceRay(rayvec, raystart, DEPTH, OUT_OBJECT, &check);
+
+							if (check.object_hit == NO_HIT)
+								TColor = RayTracer::GetInstance()->backgroundColor;
+							else
+								TColor = check.color;
+
+							color = color + TColor;
+						}
+
+						color = color * 0.25f;
+			*/
+
+			if (useSSAA)
 			{
-
-				// fragmentx = xscreen + ((rand() % 200) - 100) / 100000.0f;
-				// fragmenty = yscreen + ((rand() % 200) - 100) / 100000.0f;
-
-				//	Convert the x coordinate to be a DBL from -0.5 to 0.5.
-				x0 = (double)fragmentx / (double)width - 0.5;
-				//	Convert the y coordinate to be a DBL from -0.5 to 0.5.
-				y0 = ((double)(height - 1) - (double)fragmenty) / (double)height - 0.5;
-
-				rayvec.x = camera.direction.x +
-						   x0 * camera.right.x +
-						   y0 * camera.up.x;
-				rayvec.y = camera.direction.y +
-						   x0 * camera.right.y +
-						   y0 * camera.up.y;
-				rayvec.z = camera.direction.z +
-						   x0 * camera.right.z +
-						   y0 * camera.up.z;
-
-				rayvec.Normalize();
-
-				RayTracer::GetInstance()->TraceRay(rayvec, raystart, DEPTH, OUT_OBJECT, &check);
-
-				if (check.object_hit == NO_HIT)
-					TColor = RayTracer::GetInstance()->backgroundColor;
-				else
-					TColor = check.color;
-
-				// color = color + (TColor * 0.25f);
-				color = TColor;
+				// Accumulate light for N samples.
+				for (int sample = 0; sample < 4; ++sample)
+				{
+					color = color + TraceRay(xscreen + jitterMatrix[2 * sample], yscreen + jitterMatrix[2 * sample + 1]) * 0.25f;
+				}
+			}
+			else
+			{
+				color = TraceRay(xscreen, yscreen);
 			}
 
-			//			if ((yscreen > 0 && yscreen < 601) &&
-			//				(xscreen > 0 && xscreen < 801))
 			if ((yscreen > 0 && yscreen < height + 1) &&
 				(xscreen > 0 && xscreen < width + 1))
 			{
-				//			Vector3d		AAColor ;
-
-				//				AAColor	= TColor ;
-				//				addV ( AAColor, AABuffer [ xscreen ], &AAColor ) ;
-				//				addV ( AAColor, AABuffer [ xscreen - 1 ], &AAColor ) ;
-				//				mulS ( AAColor, 1.0/3.0, &AAColor ) ;
 
 				imageBuffer.Plot(
 					xscreen - 1,
-					// height - (yscreen - 1) - 1,
 					yscreen - 1,
 					(long)(color.x * 255.0),
 					(long)(color.y * 255.0),
 					(long)(color.z * 255.0),
 					255);
 			}
-
-			//			AABuffer [ xscreen ]	= TColor ;
 		}
 	}
+}
+
+Vector3d View::TraceRay(float x, float y)
+{
+
+	Vector3d rayvec, raystart;
+	Vector3d color;
+
+	check_type check;
+
+	raystart.x = camera.location.x;
+	raystart.y = camera.location.y;
+	raystart.z = camera.location.z;
+
+	//	Convert the x coordinate to be a DBL from -0.5 to 0.5.
+	double x0 = (double)x / (double)width - 0.5;
+	//	Convert the y coordinate to be a DBL from -0.5 to 0.5.
+	double y0 = ((double)(height - 1) - (double)y) / (double)height - 0.5;
+
+	rayvec.x = camera.direction.x +
+			   x0 * camera.right.x +
+			   y0 * camera.up.x;
+	rayvec.y = camera.direction.y +
+			   x0 * camera.right.y +
+			   y0 * camera.up.y;
+	rayvec.z = camera.direction.z +
+			   x0 * camera.right.z +
+			   y0 * camera.up.z;
+
+	rayvec.Normalize();
+
+	RayTracer::GetInstance()->TraceRay(rayvec, raystart, DEPTH, OUT_OBJECT, &check);
+
+	if (check.object_hit == NO_HIT)
+		color = RayTracer::GetInstance()->backgroundColor;
+	else
+		color = check.color;
+
+	return color;
 }

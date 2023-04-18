@@ -1,0 +1,10 @@
+
+screen.size=1920,1080
+
+camera.location=0.0, 100.0, -200.0
+camera.direction=0.0, 0.0, 1.0;
+camera.angle = 70
+camera.up=0.0, 1.0, 0.0
+camera.right=1.33, 0.0, 0.0
+
+
