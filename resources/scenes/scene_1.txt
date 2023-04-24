@@ -7,4 +7,21 @@ camera.angle = 70
 camera.up=0.0, 1.0, 0.0
 camera.right=1.33, 0.0, 0.0
 
+renderer.useSSAA=true
+
+material.new= Checker, material_floor
+material_floor.difusse = 0.8, 0.8, 0.8
+material_floor.specular =0.6, 0.6, 0.6
+material_floor.ES = 50.0
+material_floor.kl = 0.0
+material_floor.ir = 0.0
+material_floor.METAL = PHONG
+material_floor.color = 0.30, 0.30, 0.30
+material_floor.reflected = 0.0, 0.0, 0.0
+material_floor.refracted = 0.0, 0.0, 0.0
+material_floor.bump_type = NO_BUMP
+material_floor.bump_data = NULL
+material_floor.scale=100.0, 100.0, 100.0
+material_floor.color1=1.0, 1.0, 1.0
+material_floor.color2= 0.2, 0.2, 0.6
 

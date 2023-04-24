@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "core/renderer/View.h"
+#include "core/scene/SceneLoader.h"
 
 #include "lodepng.h"
 
@@ -9,6 +10,8 @@
 int main(int argc, char *argv[])
 {
     const char *filename = argc > 1 ? argv[1] : "test.png";
+
+    SceneLoader::GetInstance()->Load("./resources/scenes/scene_1.txt");
 
     //    View::GetInstance()->Init();
     View::GetInstance()->Init(1280, 720);
@@ -20,7 +23,7 @@ int main(int argc, char *argv[])
                                    90.0);
 
     //  Render the scene
-    View::GetInstance()->RenderScene(true);
+    View::GetInstance()->RenderScene(false);
 
     //  Save image as PNG
     std::vector<unsigned char> image = View::GetInstance()->GetImageBuffer().data;
