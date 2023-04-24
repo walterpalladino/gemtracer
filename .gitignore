@@ -39,3 +39,4 @@ dist/*
 resources/.DS_Store
 .DS_Store
 log.txt
+libs/.DS_Store
